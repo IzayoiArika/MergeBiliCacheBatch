@@ -53,12 +53,13 @@ void mergeBiliCacheBatch(vwstring dirs) {
     for (wstring ds : dirs) mergeBiliCache(ds);
 }
 void mergeBiliCache(wstring ds) {
-    wstring subds = getAllSubdirectories(ds)[0];
-    wstring numds = getAllSubdirectories(subds)[0];
+    for (wstring subds : getAllSubdirectories(ds)) {
+        wstring numds = getAllSubdirectories(subds)[0];
 
-    system(wstr2str(
-        L"ffmpeg -i \"" + numds + L"\\video.m4s\" -i \"" + numds + L"\\audio.m4s\" -c:v copy -c:a copy \"" + wstring(curpath) + L"\\output\\" + getCachePartTitle(subds) + L".mp4\""
-    ).c_str());
+        system(wstr2str(
+            L"ffmpeg -i \"" + numds + L"\\video.m4s\" -i \"" + numds + L"\\audio.m4s\" -c:v copy -c:a copy \"" + wstring(curpath) + L"\\output\\" + getCachePartTitle(subds) + L".mp4\""
+        ).c_str());
+    }
 }
 wstring getCachePartTitle(wstring ds) {
     ifstream ifile(wstr2str(ds + L"\\entry.json"));
